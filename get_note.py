@@ -2,10 +2,10 @@ from loader import bot
 import asyncio
 from utils.db_api import db
 import datetime
-from utils.db_api.db import get_all_data
+from utils.db_api.db import get_all_data_reminders
 
 async def check_user_notes():
-    data = get_all_data()
+    data = get_all_data_reminders()
     while True:    
         cur_time = datetime.datetime.now().strftime("%H:%M")
         for row in data:
