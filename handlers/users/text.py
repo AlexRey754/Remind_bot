@@ -16,20 +16,30 @@ async def text_buttons_func(message: types.Message, state: FSMContext):
 
     elif message.text == '🤚Просмотреть заметки':
         uid = message.from_user.id
-        text = db.get_notes(uid)
+        text = db.get_text(uid,is_note=True)
         await message.answer(text,reply_markup=keyboards.default.menu)
 
-    elif message.text == '🗒Список':
-        text = db.get_data()
-        await message.answer(text)
+    elif message.text == '🤚Просмотреть напоминания':
+        uid = message.from_user.id
+        text = db.get_text(uid,is_note=False)
+        await message.answer(text,reply_markup=keyboards.default.menu)
 
-    elif message.text.startswith('/del'):
-        row_id = int(message.text[4:])
+    elif message.text.startswith('/delN'):
+        row_id = int(message.text[5:])
         uid = message.from_user.id
         try:
-            db.del_note(uid,row_id)
+            db.del_text(uid,row_id,is_note=True)
             await message.answer("Удалил")
         except:
             await message.answer("Вы можете удалять только свои заметки")
+    
+    elif message.text.startswith('/delR'):
+        row_id = int(message.text[5:])
+        uid = message.from_user.id
+        try:
+            db.del_text(uid,row_id,is_note=False)
+            await message.answer("Удалил")
+        except:
+            await message.answer("Вы можете удалять только свои напоминания")
 
 

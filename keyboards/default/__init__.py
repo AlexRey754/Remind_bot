@@ -3,6 +3,8 @@ from aiogram.types import ReplyKeyboardMarkup,KeyboardButton
 menu = ReplyKeyboardMarkup(True,True)
 menu.row(KeyboardButton('➕Добавить заметку'))
 menu.row(KeyboardButton('🤚Просмотреть заметки'))
+menu.row(KeyboardButton('🤚Просмотреть напоминания'))
+
 
 
 cancel = ReplyKeyboardMarkup(True, True)

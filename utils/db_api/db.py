@@ -49,7 +49,7 @@ session = Session()
 def create_db():
     Base.metadata.create_all(engine)
 
-def add_text(uid,header,text,time,is_note = True):
+def add_text(uid,header,text,time=None,is_note = True):
     if is_note:
         querry = Note(uid,header,text)
         session.add(querry)
@@ -71,9 +71,9 @@ def get_text(uid,is_note=True):
 
                 <i>{row.text}</i>
 
-                Заметка          /del{row.id}
+                Заметка          /delN{row.id}
                 '''
-        text = 'Не заведено ни одной заметки'
+        else: text = 'Не заведено ни одной заметки'
         return text
 
     else:
@@ -86,9 +86,9 @@ def get_text(uid,is_note=True):
 
                 <i>{row.text}</i>
 
-                {row.time}          /del{row.id}
+                {row.time}          /delR{row.id}
                 '''
-        text = 'Не заведено ни одного напоминания'
+        else: text = 'Не заведено ни одного напоминания'
         return text
 
 def del_text(uid,id,is_note=True):
