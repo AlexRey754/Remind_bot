@@ -3,6 +3,7 @@ import asyncio
 from utils.db_api import db
 import datetime
 from utils.db_api.db import get_all_data_reminders
+import time
 
 async def check_user_notes():
     data = get_all_data_reminders()
@@ -12,7 +13,7 @@ async def check_user_notes():
             if row.time == cur_time:
                 db.del_text(row.uid,row.id,is_note=False)
                 await bot.send_message(row.uid,row.text)
-        await asyncio.sleep(60)
+        time.sleep(3)
 
 
 # async def check():

@@ -1,3 +1,5 @@
+
+
 clocks = {
     1:'12:20',
     2:'1222:20',
@@ -28,7 +30,7 @@ def check_success_time(data:list):
             print(f'''Test №{number} not passed!!!!!''')
 
 
-check_success_time(clocks)
+# check_success_time(clocks)
 
 # import datetime
 # time = datetime.datetime.utcnow().strftime("%D....%H:%M")
@@ -38,3 +40,24 @@ check_success_time(clocks)
 # # printing in dd/mm/YY H:M:S format using strftime()
 # dt_string = dt.strftime("Date: %d/%m/%Y  time: %H:%M:%S")
 # print("Current date and time =", dt_string)
+
+import re
+text = '/delR123123'
+
+# s = text.split('/del')
+# print(s)
+# if 'R' in s[1]:
+#     print(s[1][1:])
+# else:
+#     print(text)
+
+match text:
+    case 'delR',numbers:
+        print('N'+ str(numbers))
+    case _:
+        s = text.split('/delR')
+        print(str(s[1:]))
+        match s:
+            case 'R':
+
+                print(f'Something wrong {s[1:]}')
