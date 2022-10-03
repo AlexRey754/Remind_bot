@@ -2,14 +2,15 @@ from loader import bot
 import asyncio
 from utils.db_api import db
 import datetime
+from utils.db_api.db import get_all_data
 
-async def check_user_notes(data:list):
-    # print(querry[1].time)
+async def check_user_notes():
+    data = get_all_data()
     while True:    
         cur_time = datetime.datetime.now().strftime("%H:%M")
         for row in data:
             if row.time == cur_time:
-                db.del_note(row.uid,row.id)
+                db.del_text(row.uid,row.id,is_note=False)
                 await bot.send_message(row.uid,row.text)
         await asyncio.sleep(60)
 
@@ -35,16 +36,3 @@ async def check_user_notes(data:list):
 #         await asyncio.sleep(60)
 
 
-# cur.execute('''CREATE TABLE IF NOT EXISTS "reminders" (
-#     "id"	INTEGER,
-#     "user_chat_id"	INTEGER,
-#     "local_time"	TEXT,
-#     "local_days"	TEXT,
-#     "time"	TEXT,
-#     "text"	TEXT,
-#     "days"	TEXT,
-#     PRIMARY KEY("id")
-#     )''')
-
-
-# check_user_notes(db.get_all_data())

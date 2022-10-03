@@ -19,6 +19,20 @@ class Note(Base):
     uid = Column(Integer)
     header = Column(String)
     text = Column(String)
+    
+
+    def __init__(self, uid, header,text):
+        self.uid = uid
+        self.header = header
+        self.text = text
+
+class Reminders(Base):
+    __tablename__ = 'reminders'
+
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    uid = Column(Integer)
+    header = Column(String)
+    text = Column(String)
     time = Column(String)
 
     def __init__(self, uid, header,text,time):
@@ -35,35 +49,60 @@ session = Session()
 def create_db():
     Base.metadata.create_all(engine)
 
-def add_note(uid,header,text,time='now'):
-    querry = Note(uid,header,text,time)
-    session.add(querry)
-    session.commit()
-
-def get_notes(uid):
-    querry = session.query(Note).filter(Note.uid==uid).all()
-    if querry:
-        text = 'Ваши заметки\n'
-        for row in querry:
-            text = text + f'''
-                       <b>{row.header}</b>
-
-            <i>{row.text}</i>
-
-            {row.time}          /del{row.id}
-            '''
+def add_text(uid,header,text,time,is_note = True):
+    if is_note:
+        querry = Note(uid,header,text)
+        session.add(querry)
+        session.commit()
     else:
+        querry = Reminders(uid,header,text,time)
+        session.add(querry)
+        session.commit()
+
+
+def get_text(uid,is_note=True):
+    if is_note:
+        querry = session.query(Note).filter(Note.uid==uid).all()
+        if querry:
+            text = 'Ваши заметки\n'
+            for row in querry:
+                text = text + f'''
+                           <b>{row.header}</b>
+
+                <i>{row.text}</i>
+
+                Заметка          /del{row.id}
+                '''
         text = 'Не заведено ни одной заметки'
-    return text
+        return text
 
-def del_note(uid,id):
-    obj = session.query(Note).filter(and_(Note.id==id,Note.uid==uid)).one()
-    session.delete(obj)
-    session.commit()
+    else:
+        querry = session.query(Reminders).filter(Reminders.uid==uid).all()
+        if querry:
+            text = 'Ваши заметки\n'
+            for row in querry:
+                text = text + f'''
+                           <b>{row.header}</b>
 
+                <i>{row.text}</i>
 
-def get_all_data():
-    querry = session.query(Note).all()
+                {row.time}          /del{row.id}
+                '''
+        text = 'Не заведено ни одного напоминания'
+        return text
+
+def del_text(uid,id,is_note=True):
+    if is_note:
+        obj = session.query(Note).filter(and_(Note.id==id,Note.uid==uid)).one()
+        session.delete(obj)
+        session.commit()
+    else:
+        obj = session.query(Reminders).filter(and_(Reminders.id==id,Reminders.uid==uid)).one()
+        session.delete(obj)
+        session.commit()
+
+def get_all_data_reminders():
+    querry = session.query(Reminders).all()
     return querry
 
 

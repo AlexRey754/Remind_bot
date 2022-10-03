@@ -6,7 +6,7 @@ from aiogram.dispatcher import FSMContext
 from states import Request_reg
 import keyboards
 from utils.db_api import db
-import datetime
+
 
 
 @dp.message_handler(state=Request_reg.header)
@@ -76,9 +76,12 @@ async def save_note(message: types.Message, state: FSMContext):
         data = await state.get_data()
         header = data.get('header')
         text = data.get('text')
-        time = data.get('time')  #  time = datetime.datetime.now()
+        time = data.get('time')
         uid = message.from_user.id
-        db.add_note(uid,header,text,time)
+        if time == 'Заметка':
+            db.add_text(uid,header,text)
+        else:
+            db.add_text(uid,header,text,time,is_note=False)
         await state.finish()
         await message.answer('Сохранил',reply_markup=keyboards.default.menu)
 
