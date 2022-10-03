@@ -50,56 +50,59 @@ def create_db():
     Base.metadata.create_all(engine)
 
 def add_text(uid,header,text,time=None,is_note = True):
-    if is_note:
-        querry = Note(uid,header,text)
-        session.add(querry)
-        session.commit()
-    else:
-        querry = Reminders(uid,header,text,time)
-        session.add(querry)
-        session.commit()
+    match is_note:
+        case True:
+            querry = Note(uid,header,text)
+            session.add(querry)
+            session.commit()
+        case _:
+            querry = Reminders(uid,header,text,time)
+            session.add(querry)
+            session.commit()
 
 
 def get_text(uid,is_note=True):
-    if is_note:
-        querry = session.query(Note).filter(Note.uid==uid).all()
-        if querry:
-            text = 'Ваши заметки\n'
-            for row in querry:
-                text = text + f'''
-                           <b>{row.header}</b>
+    match is_note:
+        case True:
+            querry = session.query(Note).filter(Note.uid==uid).all()
+            if querry:
+                text = 'Ваши заметки\n'
+                for row in querry:
+                    text = text + f'''
+                               <b>{row.header}</b>
 
-                <i>{row.text}</i>
+                    <i>{row.text}</i>
 
-                Заметка          /delN{row.id}
-                '''
-        else: text = 'Не заведено ни одной заметки'
-        return text
+                    Заметка          /delN{row.id}
+                    '''
+            else: text = 'Не заведено ни одной заметки'
+            return text
 
-    else:
-        querry = session.query(Reminders).filter(Reminders.uid==uid).all()
-        if querry:
-            text = 'Ваши заметки\n'
-            for row in querry:
-                text = text + f'''
-                           <b>{row.header}</b>
+        case _:
+            querry = session.query(Reminders).filter(Reminders.uid==uid).all()
+            if querry:
+                text = 'Ваши заметки\n'
+                for row in querry:
+                    text = text + f'''
+                               <b>{row.header}</b>
 
-                <i>{row.text}</i>
+                    <i>{row.text}</i>
 
-                {row.time}          /delR{row.id}
-                '''
-        else: text = 'Не заведено ни одного напоминания'
-        return text
+                    {row.time}          /delR{row.id}
+                    '''
+            else: text = 'Не заведено ни одного напоминания'
+            return text
 
 def del_text(uid,id,is_note=True):
-    if is_note:
-        obj = session.query(Note).filter(and_(Note.id==id,Note.uid==uid)).one()
-        session.delete(obj)
-        session.commit()
-    else:
-        obj = session.query(Reminders).filter(and_(Reminders.id==id,Reminders.uid==uid)).one()
-        session.delete(obj)
-        session.commit()
+    match is_note:
+        case True:
+            obj = session.query(Note).filter(and_(Note.id==id,Note.uid==uid)).one()
+            session.delete(obj)
+            session.commit()
+        case _:
+            obj = session.query(Reminders).filter(and_(Reminders.id==id,Reminders.uid==uid)).one()
+            session.delete(obj)
+            session.commit()
 
 def get_all_data_reminders():
     querry = session.query(Reminders).all()
