@@ -41,23 +41,38 @@ def check_success_time(data:list):
 # dt_string = dt.strftime("Date: %d/%m/%Y  time: %H:%M:%S")
 # print("Current date and time =", dt_string)
 
-import re
-text = '/delR123123'
 
-# s = text.split('/del')
-# print(s)
-# if 'R' in s[1]:
-#     print(s[1][1:])
-# else:
-#     print(text)
+import logging
+import threading
+import time
 
-match text:
-    case 'delR',numbers:
-        print('N'+ str(numbers))
-    case _:
-        s = text.split('/delR')
-        print(str(s[1:]))
-        match s:
-            case 'R':
+def thread_function(name):
+    logging.info("Thread %s: starting", name)
+    sec = 0
+    while True:
+        sec+=1
+        print(f'{sec} seconds')
+        time.sleep(2)
+        if sec == 5:
+            logging.info("Thread %s: finishing", name)
+            break
 
-                print(f'Something wrong {s[1:]}')
+if __name__ == "__main__":
+    format = "%(asctime)s: %(message)s"
+    logging.basicConfig(format=format, level=logging.INFO,
+                        datefmt="%H:%M:%S")
+
+    x = threading.Thread(target=thread_function, args=(1,))
+
+
+    threads = list()
+    for index in range(1):
+        logging.info("Main    : create and start thread %d.", index)
+        x = threading.Thread(target=thread_function, args=(index,))
+        threads.append(x)
+        x.start()
+
+    for index, thread in enumerate(threads):
+        logging.info("Main    : before joining thread %d.", index)
+        thread.join()
+        logging.info("Main    : thread %d done", index)

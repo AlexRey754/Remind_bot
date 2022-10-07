@@ -6,6 +6,7 @@ from aiogram.dispatcher import FSMContext
 from states import Request_reg
 import keyboards
 from utils.db_api import db
+from get_note import check_user_notes
 
 
 

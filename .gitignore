@@ -128,5 +128,8 @@ dmypy.json
 # Pyre type checker
 .pyre/
 .idea/*
+
+
 .env
 .__pycache__
+tests.py

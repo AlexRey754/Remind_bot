@@ -6,6 +6,7 @@ from aiogram.dispatcher import FSMContext
 from states import Request_reg
 import keyboards
 from utils.db_api import db
+import time
 
 @dp.message_handler(content_types=['text'])
 async def text_buttons_func(message: types.Message, state: FSMContext):
@@ -41,5 +42,6 @@ async def text_buttons_func(message: types.Message, state: FSMContext):
             await message.answer("Удалил напоминание")
         except:
             await message.answer("Вы можете удалять только свои напоминания")
+
 
 

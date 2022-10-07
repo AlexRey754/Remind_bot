@@ -3,17 +3,31 @@ import asyncio
 from utils.db_api import db
 import datetime
 from utils.db_api.db import get_all_data_reminders
+import datetime
+
+from schedule import every, repeat, run_pending
 import time
 
-async def check_user_notes():
-    data = get_all_data_reminders()
-    while True:    
+
+
+
+# @repeat(every(3).seconds)
+def reminders():
+    while True:
+        data = get_all_data_reminders()
         cur_time = datetime.datetime.now().strftime("%H:%M")
         for row in data:
-            if row.time == cur_time:
-                db.del_text(row.uid,row.id,is_note=False)
-                await bot.send_message(row.uid,row.text)
-        time.sleep(3)
+            print(row.id,row.text)
+            time.sleep(2)
+        # if row.time == cur_time:
+        #     db.del_text(row.uid,row.id,is_note=False)
+            # bot.send_message(row.uid,row.text)
+       
+
+def check_user_notes():
+    run_pending()
+    time.sleep(1)
+
 
 
 # async def check():
